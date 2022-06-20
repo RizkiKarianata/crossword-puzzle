@@ -1,6 +1,6 @@
 <h1 align="center">Welcome to Crossword Puzzle! 👋 </h1>
 
-<p align="center">Crossword Puzzle is an application for entertainment purposes only. This application is used to find or search for answers to crossword puzzles. Built using Framework7. 💖 </p>
+<p align="center">Crossword Puzzle is an application for entertainment purposes only and is very fun. This application is used to find or search for answers to crossword puzzles. Built using Framework7. 💖 </p>
 
 <p align="center">
 <img src="https://img.shields.io/github/contributors/RizkiKarianata/crossword-puzzle?style=flat-square">
