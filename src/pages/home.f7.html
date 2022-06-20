@@ -1,12 +1,3 @@
-<style>
-	.card-backdrop {
-    	background: transparent;
-    	backdrop-filter: none;
-	}
-	.card-backdrop-in {
-		pointer-events: none;
-	}
-</style>
 <template>
 	<div class="page">
 		<div class="navbar">
@@ -17,28 +8,41 @@
 			</div>
 		</div>
 		<div class="page-content">
-			<div class="block">
-				{{#each data}}
-				<div class="card card-expandable">
-					<div class="card-content">
-						<div class="bg-color-{{this.background}}" style="height: 300px">
-							<div class="card-header text-color-white display-block">
-					  			{{this.author}}
-					  			<br>
-					  			<small style="opacity: 0.7">{{this.title}}</small>
-							</div>
-							<a href="#" class="link card-close card-opened-fade-in color-black" style="position: absolute; right: 15px; top: 15px">
-								<i class="icon f7-icons">xmark_circle_fill</i>
-							</a>
+			<div class="list no-hairlines-md">
+				<ul>
+					<li class="item-content item-input">
+						<div class="item-media">
+							<i class="icon demo-list-icon"></i>
 						</div>
-						<div class="card-content-padding">
-							<p>{{this.story}}</p>
-							<br>
-							<strong>The moral of the short story is {{this.moral}}</strong>
-				  		</div>
-					</div>
-			  	</div>
-				{{/each}}
+						<div class="item-inner">
+							<div class="item-title item-label">Kata Kunci</div>
+							<div class="item-input-wrap">
+								<input type="text" placeholder="Kata Kunci" name="kata_kunci" id="kata_kunci" autocomplete="off" />
+								<span class="input-clear-button"></span>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="block">
+				<div class="row">
+					<button class="col button button-large button-raised" @click="results">Lihat Jawaban</button>
+				</div>
+			</div>
+			<div class="list">
+				<ul>
+					{{#each data}}
+					<li>
+						<a href="" class="item-link item-content">
+							<div class="item-inner">
+								<div class="item-title">
+									<div class="item-header">Kesulitan: {{this.stars}}</div>Jawaban: {{this.word}}<div class="item-footer">Clue: {{this.clue}}</div>
+								</div>
+							</div>
+						</a>
+					</li>
+					{{/each}}
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -51,24 +55,34 @@
 			var $$ = this.$$;
 			var self = this;
 		},
+		methods: {
+			results: function() {
+				var $this = this;
+				var app = this.$app;
+				var $$ = this.$$;
+				var self = this;
+				var response = new Array();
+
+				var kata_kunci = $$('#kata_kunci').val();
+
+				if(kata_kunci == "") {
+					app.dialog.alert("Kata Kunci tidak boleh kosong", 'Peringatan')
+				}else {
+					app.request.get('https://kunci-tts-api.vercel.app/api/answers?question='+kata_kunci, (data, status, xhr) => {
+						response = JSON.parse(data);
+						self.$setState({
+							data: response.answers
+						});
+					});
+				}
+			}  
+		},
 		on: {
 			pageInit: function () {
 				var self = this;
 				var $this = this;
 				var app = this.$app;
 				var $$ = this.$$;
-				var response = new Array();
-				var bg = ['blue', 'red', 'yellow', 'green', 'purple'];
-
-				app.request.get('https://shortstories-api.herokuapp.com/stories', (data, status, xhr) => {
-					response = JSON.parse(data);
-					response.forEach(value => {
-						value.background = bg[Math.floor(Math.random() * bg.length)];;
-					});
-					self.$setState({
-						data: response
-					});
-				});
 			},
 		}
 	}
